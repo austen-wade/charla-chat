@@ -1,17 +1,22 @@
-const { Client } = require('pg');
+const { Client } = require("pg");
+const { DB_PORT, DB_NAME, DB_USER, DB_HOST, DB_PASS } = process.env;
 
 const client = new Client({
-    host: `localhost`,
-    port: `5432`,
-    user: 'postgres',
-    password: 'Shoes112',
+    host: DB_HOST,
+    database: DB_NAME,
+    user: DB_USER,
+    password: DB_PASS,
+    port: DB_PORT,
+    ssl: {
+        rejectUnauthorized: false,
+    },
 });
 
 client.connect();
 
 client.query(`SELECT * FROM chat_user`, (err, res) => {
-    console.log({ res: res.rows[0] });
-        client.end();
-})
+    console.log({ users: res.rows });
+    client.end();
+});
 
 module.exports = client;
