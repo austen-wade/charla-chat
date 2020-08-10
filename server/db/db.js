@@ -1,7 +1,7 @@
-const { Client } = require("pg");
+const { Pool } = require("pg");
 const { DB_PORT, DB_NAME, DB_USER, DB_HOST, DB_PASS } = process.env;
 
-const client = new Client({
+const pool = new Pool({
     host: DB_HOST,
     database: DB_NAME,
     user: DB_USER,
@@ -12,11 +12,8 @@ const client = new Client({
     },
 });
 
-client.connect();
+pool.connect();
 
-client.query(`SELECT * FROM chat_user`, (err, res) => {
-    console.log({ users: res.rows });
-    client.end();
-});
-
-module.exports = client;
+module.exports = {
+    query: (text, params) => pool.query(text, params),
+};

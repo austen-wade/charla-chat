@@ -1,41 +1,22 @@
 import React, { useState } from "react";
 import SendMessage from "./components/SendMessage";
 import Messages from "./components/Messages";
+import SignUp from "./components/SignUp";
 import "./App.scss";
 
 function App() {
-    const [auth, setAuth] = useState(false);
-    const [user, setUser] = useState(null);
-
-    if (auth) {
+    if (!!null) {
         return (
             <>
                 <div className="chat">
                     <Messages />
-                    <SendMessage user={user} />
+                    <SendMessage user={"austen"} />
                 </div>
             </>
         );
     }
 
-    return (
-        <>
-            user: {user}
-            <br />
-            <input
-                type="text"
-                onChange={(e) => setUser(e.target.value)}
-                value={user}
-            />
-            <button
-                onClick={() => {
-                    setAuth(!auth);
-                }}
-            >
-                join chat
-            </button>
-        </>
-    );
+    return <SignUp />;
 }
 
 export default App;

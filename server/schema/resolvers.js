@@ -1,41 +1,37 @@
-const { Pool } = 'pg';
-
-const authors = [
-	{
-		name: 'J.K. Rowling',
-		books: [{ title: 'Harry Potter and the Chamber of Secrets' }],
-	},
-];
-
-const books = [
-	{
-		id: 1,
-		title: 'Harry Potter and the Chamber of Secrets',
-		author: 'J.K. Rowling',
-	},
-	{
-		id: 2,
-		title: 'Jurassic Park',
-		author: 'Michael Crichton',
-	},
-];
+const db = require("../db/db.js");
+const bcrypt = require("bcryptjs");
 
 const resolvers = {
-	Query: {
-		books: () => books,
-		authors: () => authors,
-	},
-	Mutation: {
-		addBook: (_, req) => {
-			const existingBook = books.find((book) => book.id === req.id);
-			if (!existingBook) {
-				const newBook = { id: req.id, title: req.title };
-				books.push(newBook);
-				return newBook;
-			}
-			return existingBook;
-		},
-	},
+    Query: {
+        users: async () =>
+            await (await db.query(`SELECT * FROM chat_user`)).rows,
+    },
+    Mutation: {
+        addUser: async (_, req) => {
+            const { handle, email } = req;
+
+            const existingQuery = await db.query(
+                `SELECT handle, email FROM chat_user WHERE handle = $1 OR email = $2`,
+                [handle, email]
+            );
+
+            if (existingQuery.rows[0]) {
+                const existingUser = [];
+                existingUser.concat(existingQuery.rows[0]);
+                return existingQuery.rows[0];
+            }
+
+            const salt = bcrypt.genSaltSync(10);
+            const passhash = bcrypt.hashSync(req.password, salt);
+
+            const userFromDb = await db.query(
+                `INSERT INTO chat_user(handle, email, salt, passhash) VALUES($1, $2, $3, $4) RETURNING handle, email`,
+                [handle, email, salt, passhash]
+            );
+
+            return userFromDb.rows[0];
+        },
+    },
 };
 
 module.exports = resolvers;

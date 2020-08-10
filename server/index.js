@@ -10,7 +10,10 @@ const { ApolloServer } = require("apollo-server-express");
 const initSockets = require("./sockets");
 const db = require("./db/db");
 
-const apolloServer = new ApolloServer({ typeDefs, resolvers });
+const apolloServer = new ApolloServer({
+    typeDefs,
+    resolvers,
+});
 
 apolloServer.applyMiddleware({ app });
 
