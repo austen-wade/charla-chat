@@ -26,7 +26,7 @@ const typeDefs = gql`
     }
 
     type MessageCreated {
-        message: Message!
+        message: Message
     }
 `;
 

@@ -40,19 +40,20 @@ const resolvers = {
             return userFromDb.rows[0];
         },
         addMessage: async (parent, { content }, ctx) => {
-            pubSub.publish(MESSAGE_CREATED, { messageCreated: content });
             const querydb = await db.query(
                 `INSERT INTO messages(content) VALUES($1) RETURNING content`,
                 [content]
             );
-            console.log(querydb.rows[0]);
+            pubSub.publish(MESSAGE_CREATED, {
+                messageCreated: { message: querydb.rows[0] },
+            });
             return querydb.rows[0];
         },
     },
     Subscription: {
         messageCreated: {
             subscribe: () => {
-                return pubSub.asyncIterator(MESSAGE_CREATED);
+                return pubSub.asyncIterator([MESSAGE_CREATED]);
             },
         },
     },
