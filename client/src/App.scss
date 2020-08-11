@@ -49,7 +49,7 @@ code {
     outline: none;
 }
 
-.signup-form {
+.auth-form {
     display: grid;
     justify-content: center;
     align-content: center;
@@ -60,10 +60,6 @@ code {
         min-width: 200px;
         padding: 5px;
     }
-    .or-login {
-        text-align: center;
-        margin: 10px;
-    }
     label {
         font-size: 14px;
     }
@@ -71,5 +67,9 @@ code {
         cursor: pointer;
         margin-top: 20px;
         font-size: 16px;
+    }
+    .or {
+        text-align: center;
+        margin: 10px;
     }
 }

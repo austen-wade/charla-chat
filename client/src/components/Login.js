@@ -1,29 +1,19 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 
-const SignUp = (props) => {
+const Login = (props) => {
     const { register, handleSubmit, errors } = useForm();
     const onSubmit = (data) => console.log({ data, errors });
 
     return (
         <form className="auth-form" onSubmit={handleSubmit(onSubmit)}>
             <div className="input-group">
-                <label>Email</label>
-                <br />
-                <input
-                    type="email"
-                    name="email"
-                    ref={register({ required: true, maxLength: 256 })}
-                />
-            </div>
-            <br />
-            <div className="input-group">
-                <label>Username</label>
+                <label>Username or Email</label>
                 <br />
                 <input
                     type="text"
-                    name="handle"
-                    ref={register({ required: true, maxLength: 30 })}
+                    name="username"
+                    ref={register({ required: true, maxLength: 256 })}
                 />
             </div>
             <br />
@@ -36,13 +26,13 @@ const SignUp = (props) => {
                     ref={register({ required: true, maxLength: 30 })}
                 />
             </div>
-            <button type="submit">Sign Up</button>
+            <button type="submit">Login</button>
 
             <a onClick={props.toggleSignUp} className="or" href="/">
-                Or login
+                No account? Sign up
             </a>
         </form>
     );
 };
 
-export default SignUp;
+export default Login;
