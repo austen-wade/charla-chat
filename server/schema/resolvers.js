@@ -10,6 +10,9 @@ const resolvers = {
     Query: {
         users: async () =>
             await (await db.query(`SELECT * FROM chat_user`)).rows,
+        messages: async () => {
+            return await (await db.query(`SELECT * FROM messages`)).rows;
+        },
     },
     Mutation: {
         addUser: async (_, req) => {
@@ -38,15 +41,19 @@ const resolvers = {
         },
         addMessage: async (parent, { content }, ctx) => {
             pubSub.publish(MESSAGE_CREATED, { messageCreated: content });
-            return await db.query(
-                `INSERT INTO messages(content) VALUES($1) RETURNING content `,
+            const querydb = await db.query(
+                `INSERT INTO messages(content) VALUES($1) RETURNING content`,
                 [content]
             );
+            console.log(querydb.rows[0]);
+            return querydb.rows[0];
         },
     },
     Subscription: {
         messageCreated: {
-            subscribe: () => pubSub.asyncIterator([MESSAGE_CREATED]),
+            subscribe: () => {
+                return pubSub.asyncIterator(MESSAGE_CREATED);
+            },
         },
     },
 };

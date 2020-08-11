@@ -8,11 +8,12 @@ const typeDefs = gql`
     }
 
     type Message {
-        content: String!
+        content: String
     }
 
     type Query {
         users: [User]
+        messages: [Message]
     }
 
     type Mutation {
@@ -21,7 +22,11 @@ const typeDefs = gql`
     }
 
     type Subscription {
-        messageCreated: Message!
+        messageCreated: MessageCreated!
+    }
+
+    type MessageCreated {
+        message: Message!
     }
 `;
 
