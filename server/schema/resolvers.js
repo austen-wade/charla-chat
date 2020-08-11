@@ -1,5 +1,10 @@
 const db = require("../db/db.js");
 const bcrypt = require("bcryptjs");
+const { PubSub } = require("apollo-server-express");
+
+const pubSub = new PubSub();
+
+const MESSAGE_CREATED = "MESSAGE_CREATED";
 
 const resolvers = {
     Query: {
@@ -30,6 +35,18 @@ const resolvers = {
             );
 
             return userFromDb.rows[0];
+        },
+        addMessage: async (parent, { content }, ctx) => {
+            pubSub.publish(MESSAGE_CREATED, { messageCreated: content });
+            return await db.query(
+                `INSERT INTO messages(content) VALUES($1) RETURNING content `,
+                [content]
+            );
+        },
+    },
+    Subscription: {
+        messageCreated: {
+            subscribe: () => pubSub.asyncIterator([MESSAGE_CREATED]),
         },
     },
 };

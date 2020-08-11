@@ -23,6 +23,7 @@ app.get("/", () => {
 });
 
 const httpServer = http.createServer(app);
+apolloServer.installSubscriptionHandlers(httpServer);
 
 initSockets(httpServer);
 
