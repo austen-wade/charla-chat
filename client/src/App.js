@@ -8,6 +8,11 @@ import Login from "./components/Login";
 function App() {
     const [isSignUp, setSignUp] = useState(false);
 
+    const handleToggleSignUp = (e) => {
+        e.preventDefault();
+        setSignUp(!isSignUp);
+    };
+
     if (!!null) {
         return (
             <>
@@ -20,23 +25,9 @@ function App() {
     }
 
     if (isSignUp) {
-        return (
-            <SignUp
-                toggleSignUp={(e) => {
-                    e.preventDefault();
-                    setSignUp(false);
-                }}
-            />
-        );
+        return <SignUp toggleSignUp={handleToggleSignUp} />;
     } else {
-        return (
-            <Login
-                toggleSignUp={(e) => {
-                    e.preventDefault();
-                    setSignUp(true);
-                }}
-            />
-        );
+        return <Login toggleSignUp={handleToggleSignUp} />;
     }
 }
 
