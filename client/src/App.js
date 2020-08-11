@@ -7,27 +7,28 @@ import Login from "./components/Login";
 
 function App() {
     const [isSignUp, setSignUp] = useState(false);
+    const [user, setUser] = useState(null);
 
     const handleToggleSignUp = (e) => {
         e.preventDefault();
         setSignUp(!isSignUp);
     };
 
-    if (!!null) {
+    if (user) {
         return (
             <>
                 <div className="chat">
                     <Messages />
-                    <SendMessage user={"austen"} />
+                    <SendMessage user={user} />
                 </div>
             </>
         );
     }
 
     if (isSignUp) {
-        return <SignUp toggleSignUp={handleToggleSignUp} />;
+        return <SignUp toggleSignUp={handleToggleSignUp} setUser={setUser} />;
     } else {
-        return <Login toggleSignUp={handleToggleSignUp} />;
+        return <Login toggleSignUp={handleToggleSignUp} setUser={setUser} />;
     }
 }
 

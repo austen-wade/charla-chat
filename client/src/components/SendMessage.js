@@ -10,7 +10,7 @@ const SendMessage = ({ user }) => {
     const onSubmit = (data) => {
         socketDispatch({
             type: "send_data",
-            payload: { user, ...data },
+            payload: { user: user.handle, ...data },
         });
         reset("message");
     };
@@ -24,8 +24,6 @@ const SendMessage = ({ user }) => {
                 autoComplete="off"
                 ref={register({ required: true })}
             />
-
-            {errors.message && <span>This field is required.</span>}
         </form>
     );
 };

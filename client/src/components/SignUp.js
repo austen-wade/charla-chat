@@ -3,7 +3,10 @@ import { useForm } from "react-hook-form";
 
 const SignUp = (props) => {
     const { register, handleSubmit, errors } = useForm();
-    const onSubmit = (data) => console.log({ data, errors });
+    const onSubmit = (data) =>
+        props.setUser({
+            handle: data.handle,
+        });
 
     return (
         <form className="auth-form" onSubmit={handleSubmit(onSubmit)}>
@@ -15,6 +18,7 @@ const SignUp = (props) => {
                     name="email"
                     ref={register({ required: true, maxLength: 256 })}
                 />
+                {errors.email && <span>This field is required.</span>}
             </div>
             <br />
             <div className="input-group">
@@ -25,6 +29,7 @@ const SignUp = (props) => {
                     name="handle"
                     ref={register({ required: true, maxLength: 30 })}
                 />
+                {errors.handle && <span>This field is required.</span>}
             </div>
             <br />
             <div className="input-group">
@@ -35,6 +40,7 @@ const SignUp = (props) => {
                     name="password"
                     ref={register({ required: true, maxLength: 30 })}
                 />
+                {errors.password && <span>This field is required.</span>}
             </div>
             <button type="submit">Sign Up</button>
 
