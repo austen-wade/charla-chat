@@ -6,7 +6,7 @@ const SignUp = () => {
     const onSubmit = (data) => console.log({ data, errors });
 
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form className="signup-form" onSubmit={handleSubmit(onSubmit)}>
             <div className="input-group">
                 <label>Email</label>
                 <br />
@@ -36,7 +36,11 @@ const SignUp = () => {
                     ref={register({ required: true, maxLength: 30 })}
                 />
             </div>
-            <button type="submit">Submit</button>
+            <button type="submit">Sign Up</button>
+
+            <a className="or-login" href="/">
+                Or login
+            </a>
         </form>
     );
 };
