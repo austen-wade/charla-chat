@@ -1,8 +1,10 @@
 const app = require("express")();
 const cors = require("cors");
 const http = require("http");
-require("dotenv").config();
+const dotenv = require("dotenv");
 const port = process.env.PORT || 4001;
+
+dotenv.config();
 
 const typeDefs = require("./schema/typeDefs");
 const resolvers = require("./schema/resolvers");

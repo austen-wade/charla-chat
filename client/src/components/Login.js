@@ -22,7 +22,7 @@ const Login = (props) => {
             </div>
             <br />
             <div className="input-group">
-                <label>Set Password</label>
+                <label>Password</label>
                 <br />
                 <input
                     type="password"

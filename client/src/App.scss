@@ -73,3 +73,37 @@ code {
         margin: 10px;
     }
 }
+
+.app-container {
+    display: flex;
+
+    .title {
+        font-weight: lighter;
+    }
+    p {
+        padding: 0;
+        margin: 0;
+        margin-bottom: 5px;
+    }
+
+    .sidebar {
+        padding: 20px;
+        width: 300px;
+        border-right: 1px solid #ccc;
+    }
+}
+
+.rooms {
+    .room {
+        color: mediumseagreen;
+        cursor: pointer;
+
+        &:hover {
+            color: mediumslateblue;
+        }
+
+        &.active {
+            color: rebeccapurple;
+        }
+    }
+}

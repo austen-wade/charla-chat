@@ -4,10 +4,17 @@ import Messages from "./components/Messages";
 import SignUp from "./components/SignUp";
 import "./App.scss";
 import Login from "./components/Login";
+import Sidebar from "./components/Sidebar";
 
 function App() {
     const [isSignUp, setSignUp] = useState(false);
-    const [user, setUser] = useState(null);
+    const [user, setUser] = useState(
+        false
+            ? null
+            : {
+                  handle: "tester",
+              }
+    );
 
     const handleToggleSignUp = (e) => {
         e.preventDefault();
@@ -16,12 +23,13 @@ function App() {
 
     if (user) {
         return (
-            <>
+            <div className="app-container">
+                <Sidebar />
                 <div className="chat">
                     <Messages />
                     <SendMessage user={user} />
                 </div>
-            </>
+            </div>
         );
     }
 
