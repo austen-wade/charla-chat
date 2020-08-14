@@ -5,24 +5,26 @@ const typeDefs = gql`
         handle: String!
         email: String!
         password: String!
+        user_id: String!
     }
 
     type Message {
         content: String
+        user_id: String!
     }
 
     type Query {
-        users: [User]
+        users(handle: String, email: String, user_id: String): [User]
         messages: [Message]
     }
 
     type Mutation {
         addUser(handle: String!, email: String!, password: String!): User
-        addMessage(content: String!): Message
+        addMessage(content: String!, user_id: String!): Message
     }
 
     type Subscription {
-        messageCreated: MessageCreated!
+        messageCreated: MessageCreated
     }
 
     type MessageCreated {

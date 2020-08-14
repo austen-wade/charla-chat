@@ -1,18 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import useSocket from "../hooks/useSocket";
-const ENDPOINT = "http://127.0.0.1:4001";
+import { CREATE_MESSAGE } from "../queries";
+import { useMutation } from "@apollo/client";
 
 const SendMessage = ({ user }) => {
     const { register, handleSubmit, errors, reset } = useForm();
-    const [, socketDispatch] = useSocket(ENDPOINT);
+    const [addMessage, { data }] = useMutation(CREATE_MESSAGE);
 
-    const onSubmit = (data) => {
-        socketDispatch({
-            type: "send_data",
-            payload: { user: user.handle, ...data },
+    const onSubmit = (formData) => {
+        addMessage({
+            variables: { content: formData.message, user_id: user.user_id },
         });
-        reset("message");
     };
 
     return (

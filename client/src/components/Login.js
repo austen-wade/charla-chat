@@ -1,17 +1,32 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useState } from "react";
-import { useQuery } from "@apollo/client";
+import { useLazyQuery } from "@apollo/client";
 import { GET_USER_HANDLES } from "../queries";
 
 const Login = (props) => {
-    const { loading, error, data } = useQuery(GET_USER_HANDLES);
+    const [email, setEmail] = useState("");
+    const [handle, setHandle] = useState("");
+
+    const [userQuery, { called, loading, data }] = useLazyQuery(
+        GET_USER_HANDLES,
+        {
+            variables: { handle, email },
+        }
+    );
     const { register, handleSubmit, errors } = useForm();
 
-    const onSubmit = (data) => {
+    const onSubmit = ({ handle, email }) => {
         if (errors.length) return;
-        props.setUser();
+        if (handle) setHandle(handle);
+        if (email) setEmail(email);
+        userQuery();
     };
+
+    useEffect(() => {
+        if (data && data.users.length) {
+            props.setUser(data.users[0]);
+        }
+    }, [data]);
 
     return (
         <form className="auth-form" onSubmit={handleSubmit(onSubmit)}>
@@ -41,20 +56,6 @@ const Login = (props) => {
             <a onClick={props.toggleSignUp} className="or" href="/">
                 No account? Sign up
             </a>
-
-            {!loading ? (
-                <>
-                    <h3>Users:</h3>
-                    <ul>
-                        {data &&
-                            data.users.map((user) => (
-                                <li key={user.handle}>{user.handle}</li>
-                            ))}
-                    </ul>
-                </>
-            ) : (
-                <span>Loading ...</span>
-            )}
         </form>
     );
 };

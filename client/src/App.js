@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import SendMessage from "./components/SendMessage";
-import Messages from "./components/Messages";
+import MessagesData from "./components/MessagesData";
 import SignUp from "./components/SignUp";
 import "./App.scss";
 import Login from "./components/Login";
@@ -25,6 +25,7 @@ function App() {
             ? null
             : {
                   handle: "tester",
+                  user_id: "75e5f407-bae1-4291-b377-f07cc5c6f5da",
               }
     );
 
@@ -40,7 +41,7 @@ function App() {
             <div className="app-container">
                 <Sidebar />
                 <div className="chat">
-                    <Messages />
+                    <MessagesData />
                     <SendMessage user={user} />
                 </div>
             </div>

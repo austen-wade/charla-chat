@@ -8,8 +8,17 @@ const MESSAGE_CREATED = "MESSAGE_CREATED";
 
 const resolvers = {
     Query: {
-        users: async () =>
-            await (await db.query(`SELECT * FROM chat_user`)).rows,
+        users: async (_, args) => {
+            if (args.handle || args.user_id || args.email) {
+                return await (
+                    await db.query(
+                        `SELECT * FROM chat_user WHERE handle = $1 OR email = $2 OR user_id = $3`,
+                        [args.handle, args.email, args.user_id]
+                    )
+                ).rows;
+            }
+            return await (await db.query(`SELECT * FROM chat_user`)).rows;
+        },
         messages: async () => {
             return await (await db.query(`SELECT * FROM messages`)).rows;
         },
@@ -33,16 +42,16 @@ const resolvers = {
             const passhash = bcrypt.hashSync(password, salt);
 
             const userFromDb = await db.query(
-                `INSERT INTO chat_user(handle, email, salt, passhash) VALUES($1, $2, $3, $4) RETURNING handle, email`,
+                `INSERT INTO chat_user(handle, email, salt, passhash) VALUES($1, $2, $3, $4) RETURNING handle, email, id`,
                 [handle, email, salt, passhash]
             );
 
             return userFromDb.rows[0];
         },
-        addMessage: async (parent, { content }, ctx) => {
+        addMessage: async (parent, { content, user_id }, ctx) => {
             const querydb = await db.query(
-                `INSERT INTO messages(content) VALUES($1) RETURNING content`,
-                [content]
+                `INSERT INTO messages(content, user_id) VALUES($1, $2) RETURNING content`,
+                [content, user_id]
             );
             pubSub.publish(MESSAGE_CREATED, {
                 messageCreated: { message: querydb.rows[0] },
