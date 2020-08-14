@@ -1,12 +1,21 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useMutation } from "@apollo/client";
+import { CREATE_USER } from "../queries";
 
 const SignUp = (props) => {
     const { register, handleSubmit, errors } = useForm();
-    const onSubmit = (data) =>
-        props.setUser({
-            handle: data.handle,
+    const [addUser, { data }] = useMutation(CREATE_USER);
+    const onSubmit = async (formData) => {
+        const registeredUser = await addUser({
+            variables: {
+                handle: formData.handle,
+                email: formData.email,
+                password: formData.password,
+            },
         });
+        props.setUser({ handle: formData.handle });
+    };
 
     return (
         <form className="auth-form" onSubmit={handleSubmit(onSubmit)}>

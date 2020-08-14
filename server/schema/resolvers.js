@@ -16,7 +16,7 @@ const resolvers = {
     },
     Mutation: {
         addUser: async (_, req) => {
-            const { handle, email } = req;
+            const { handle, email, password } = req;
 
             const existingQuery = await db.query(
                 `SELECT handle, email FROM chat_user WHERE handle = $1 OR email = $2`,
@@ -30,7 +30,7 @@ const resolvers = {
             }
 
             const salt = bcrypt.genSaltSync(10);
-            const passhash = bcrypt.hashSync(req.password, salt);
+            const passhash = bcrypt.hashSync(password, salt);
 
             const userFromDb = await db.query(
                 `INSERT INTO chat_user(handle, email, salt, passhash) VALUES($1, $2, $3, $4) RETURNING handle, email`,

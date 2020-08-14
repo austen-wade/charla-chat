@@ -25,6 +25,7 @@ const Sidebar = () => {
             <div className="rooms">
                 {rooms.map((room) => (
                     <div
+                        key={room.title}
                         className={`room ${
                             activeRoom && room.title === activeRoom.title
                                 ? "active"
