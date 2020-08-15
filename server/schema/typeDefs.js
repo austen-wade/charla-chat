@@ -10,7 +10,9 @@ const typeDefs = gql`
 
     type Message {
         content: String
-        user_id: String!
+        user_id: String
+        handle: String
+        user: User
     }
 
     type Query {

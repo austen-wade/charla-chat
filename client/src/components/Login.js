@@ -15,18 +15,25 @@ const Login = (props) => {
     );
     const { register, handleSubmit, errors } = useForm();
 
-    const onSubmit = ({ handle, email }) => {
-        if (errors.length) return;
-        if (handle) setHandle(handle);
-        if (email) setEmail(email);
-        userQuery();
+    const onSubmit = async ({ formHandle }) => {
+        if (formHandle) await setHandle(formHandle);
+        console.log({ handle });
+        // if (formEmail) await setEmail(formEmail);
+        console.log({ email });
+        await userQuery();
     };
 
     useEffect(() => {
         if (data && data.users.length) {
-            props.setUser(data.users[0]);
+            console.log({ data });
+            const userByHandle = data.users.find((user) => {
+                console.log({ dataHandle: user.handle, handle });
+                return user.handle === handle;
+            });
+            console.log({ userByHandle });
+            props.setUser(userByHandle);
         }
-    }, [data]);
+    }, [called, data, handle, email]);
 
     return (
         <form className="auth-form" onSubmit={handleSubmit(onSubmit)}>
@@ -35,7 +42,7 @@ const Login = (props) => {
                 <br />
                 <input
                     type="text"
-                    name="username"
+                    name="formHandle"
                     ref={register({ required: true, maxLength: 256 })}
                 />
                 {errors.username && <span>This field is required.</span>}
@@ -46,7 +53,7 @@ const Login = (props) => {
                 <br />
                 <input
                     type="password"
-                    name="password"
+                    name="formPassword"
                     ref={register({ required: true, maxLength: 30 })}
                 />
                 {errors.password && <span>This field is required.</span>}

@@ -15,6 +15,7 @@ export const GET_MESSAGES = gql`
     query Messages {
         messages {
             content
+            handle
         }
     }
 `;
@@ -44,6 +45,7 @@ export const MESSAGE_CREATED = gql`
         messageCreated {
             message {
                 content
+                handle
             }
         }
     }

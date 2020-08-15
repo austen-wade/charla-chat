@@ -11,6 +11,7 @@ const SendMessage = ({ user }) => {
         addMessage({
             variables: { content: formData.message, user_id: user.user_id },
         });
+        reset();
     };
 
     return (

@@ -12,10 +12,18 @@ import {
     gql,
     ApolloProvider,
 } from "@apollo/client";
+import { WebSocketLink } from "@apollo/client/link/ws";
 
+const link = new WebSocketLink({
+    uri: "ws://localhost:4001/graphql",
+    options: {
+        reconnect: true,
+    },
+});
 const client = new ApolloClient({
     uri: `http://localhost:4001/graphql`,
     cache: new InMemoryCache(),
+    link,
 });
 
 function App() {

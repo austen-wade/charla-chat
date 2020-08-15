@@ -20,7 +20,10 @@ const resolvers = {
             return await (await db.query(`SELECT * FROM chat_user`)).rows;
         },
         messages: async () => {
-            return await (await db.query(`SELECT * FROM messages`)).rows;
+            return await (
+                await db.query(`SELECT * FROM messages, chat_user WHERE messages.user_id = chat_user.user_id;
+            `)
+            ).rows;
         },
     },
     Mutation: {
@@ -42,10 +45,9 @@ const resolvers = {
             const passhash = bcrypt.hashSync(password, salt);
 
             const userFromDb = await db.query(
-                `INSERT INTO chat_user(handle, email, salt, passhash) VALUES($1, $2, $3, $4) RETURNING handle, email, id`,
+                `INSERT INTO chat_user(handle, email, salt, passhash) VALUES($1, $2, $3, $4) RETURNING handle, email, user_id`,
                 [handle, email, salt, passhash]
             );
-
             return userFromDb.rows[0];
         },
         addMessage: async (parent, { content, user_id }, ctx) => {
