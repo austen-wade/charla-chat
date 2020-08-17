@@ -15,13 +15,19 @@ const typeDefs = gql`
         user: User
     }
 
+    type Token {
+        token: String!
+    }
+
     type Query {
+        currentUser: User!
         users(handle: String, email: String, user_id: String): [User]
         messages: [Message]
     }
 
     type Mutation {
         addUser(handle: String!, email: String!, password: String!): User
+        loginUser(handle: String, email: String, password: String!): Token!
         addMessage(content: String!, user_id: String!): Message
     }
 
