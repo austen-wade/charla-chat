@@ -17,7 +17,10 @@ const Messages = ({ subscribeToNewMessages, loading, error, data }) => {
                 !!data.messages.length &&
                 data.messages.map((message) => {
                     return (
-                        <div className="message" key={message.id}>
+                        <div
+                            className="message"
+                            key={message.content + Math.random()}
+                        >
                             <div className="message-user">
                                 <b>{message.handle}</b>
                             </div>

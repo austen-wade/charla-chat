@@ -4,36 +4,23 @@ import { useLazyQuery } from "@apollo/client";
 import { GET_USER_HANDLES } from "../queries";
 
 const Login = (props) => {
-    const [email, setEmail] = useState("");
-    const [handle, setHandle] = useState("");
-
-    const [userQuery, { called, loading, data }] = useLazyQuery(
-        GET_USER_HANDLES,
-        {
-            variables: { handle, email },
-        }
-    );
     const { register, handleSubmit, errors } = useForm();
 
+    const [userQuery, { called, loading, data }] = useLazyQuery(
+        GET_USER_HANDLES
+    );
+
     const onSubmit = async ({ formHandle }) => {
-        if (formHandle) await setHandle(formHandle);
-        console.log({ handle });
-        // if (formEmail) await setEmail(formEmail);
-        console.log({ email });
-        await userQuery();
+        await userQuery({ variables: { handle: formHandle } });
     };
 
     useEffect(() => {
-        if (data && data.users.length) {
-            console.log({ data });
-            const userByHandle = data.users.find((user) => {
-                console.log({ dataHandle: user.handle, handle });
-                return user.handle === handle;
-            });
-            console.log({ userByHandle });
-            props.setUser(userByHandle);
+        if (called && !loading) {
+            if (data && data.users) {
+                props.setUser(data.users[0]);
+            }
         }
-    }, [called, data, handle, email]);
+    }, [data]);
 
     return (
         <form className="auth-form" onSubmit={handleSubmit(onSubmit)}>

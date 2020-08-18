@@ -19,8 +19,8 @@ const checkPassword = (returnedPassword, inputPassword) => {
 
 const resolvers = {
     Query: {
-        currentUser: async(_, args, { user }) => {
-            return await user; 
+        currentUser: async (_, args, { user }) => {
+            return await user;
         },
         users: async (_, args) => {
             if (args.handle || args.user_id || args.email) {
