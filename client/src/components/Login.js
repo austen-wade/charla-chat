@@ -6,6 +6,7 @@ import { GET_USER_HANDLES } from "../queries";
 const Login = (props) => {
     const [email, setEmail] = useState("");
     const [handle, setHandle] = useState("");
+    const [password, setPassword] = useState("");
 
     const [userQuery, { called, loading, data }] = useLazyQuery(
         GET_USER_HANDLES,
@@ -15,7 +16,8 @@ const Login = (props) => {
     );
     const { register, handleSubmit, errors } = useForm();
 
-    const onSubmit = async ({ formHandle }) => {
+    const onSubmit = async ({ formHandle, formPassword }) => {
+        console.log(formHandle, formPassword);
         if (formHandle) await setHandle(formHandle);
         console.log({ handle });
         // if (formEmail) await setEmail(formEmail);

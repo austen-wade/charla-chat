@@ -22,6 +22,14 @@ export const GET_MESSAGES = gql`
 
 /* Mutations */
 
+export const LOGIN = gql`
+    mutation Login($handle: String, $email: String, $password: String!) {
+        loginUser(handle: $handle, email: $email, password: $password) {
+            token
+        }
+    }
+`;
+
 export const CREATE_USER = gql`
     mutation CreateUser($handle: String!, $email: String!, $password: String!) {
         addUser(handle: $handle, email: $email, password: $password) {
@@ -31,8 +39,8 @@ export const CREATE_USER = gql`
 `;
 
 export const CREATE_MESSAGE = gql`
-    mutation CreateMessage($content: String!, $user_id: String!) {
-        addMessage(content: $content, user_id: $user_id) {
+    mutation CreateMessage($content: String!) {
+        addMessage(content: $content) {
             content
         }
     }
