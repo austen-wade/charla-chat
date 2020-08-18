@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Select from "react-select";
+import PanelToolbar from "./PanelToolbar";
 
 const Sidebar = () => {
     const [space, selectSpace] = useState(null);
@@ -39,6 +40,7 @@ const Sidebar = () => {
                     </div>
                 ))}
             </div>
+            <PanelToolbar />
         </div>
     );
 };
