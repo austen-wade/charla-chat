@@ -13,9 +13,11 @@ const initSockets = require("./sockets");
 const db = require("./db/db");
 const jwt = require("jsonwebtoken");
 
-const getUser = (token) => {
+app.use(cors());
+
+const getUser = async (token) => {
     if (token) {
-        return jwt.verify(token, process.env.SECRET);
+        return await jwt.verify(token, process.env.SECRET);
     }
 };
 
@@ -25,16 +27,19 @@ const apolloServer = new ApolloServer({
     context: async ({ req, res }) => {
         if (req) {
             const token = req.headers["x-token"] || "";
-            const user = getUser(token);
-            if (!user) throw new AuthenticationError("you must be logged in");
-            return { user, secret: process.env.SECRET };
+            if (token) {
+                const user = await getUser(token);
+                if (!user)
+                    throw new AuthenticationError("you must be logged in");
+                return { user, secret: process.env.SECRET };
+            }
         }
+        return { secret: process.env.SECRET };
     },
 });
 
 apolloServer.applyMiddleware({ app });
 
-app.use(cors());
 app.get("/", () => {
     console.log("api index");
 });

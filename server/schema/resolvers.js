@@ -9,8 +9,8 @@ const pubSub = new PubSub();
 const MESSAGE_CREATED = "MESSAGE_CREATED";
 
 const createToken = async (user, secret) => {
-    const { id, email, handle } = user;
-    return await jwt.sign({ id, email, handle }, secret);
+    const { user_id, email, handle } = user;
+    return await jwt.sign({ user_id, email, handle }, secret);
 };
 
 const checkPassword = (returnedPassword, inputPassword) => {
@@ -19,8 +19,8 @@ const checkPassword = (returnedPassword, inputPassword) => {
 
 const resolvers = {
     Query: {
-        currentUser: async(_, args, { user }) => {
-            return await user; 
+        currentUser: async (_, args, { user }) => {
+            return await user;
         },
         users: async (_, args) => {
             if (args.handle || args.user_id || args.email) {
@@ -67,7 +67,7 @@ const resolvers = {
         },
         loginUser: async (parent, { email, handle, password }, { secret }) => {
             const querydb = await db.query(
-                `SELECT handle, email, passhash FROM chat_user WHERE handle = $1 OR email = $2`,
+                `SELECT handle, email, passhash, user_id FROM chat_user WHERE handle = $1 OR email = $2`,
                 [handle, email]
             );
             const userData = querydb.rows[0];
@@ -77,11 +77,11 @@ const resolvers = {
             }
             return { token: createToken(userData, secret) };
         },
-        addMessage: async (parent, { content, user_id }, { user }) => {
+        addMessage: async (parent, { content }, { user }) => {
             user ? skip : new ForbiddenError("Not authenticated as user.");
             const querydb = await db.query(
-                `INSERT INTO messages(content, user_id) VALUES($1, $2) RETURNING content`,
-                [content, user_id]
+                `INSERT INTO messages(content, user_id) VALUES($1, $2) RETURNING content, user_id`,
+                [content, user.user_id]
             );
             pubSub.publish(MESSAGE_CREATED, {
                 messageCreated: { message: querydb.rows[0] },
