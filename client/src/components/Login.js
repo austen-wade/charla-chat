@@ -10,8 +10,10 @@ const Login = (props) => {
         GET_USER_HANDLES
     );
 
-    const onSubmit = async ({ formHandle }) => {
-        await userQuery({ variables: { handle: formHandle } });
+    const onSubmit = async ({ formHandle, formPassword }) => {
+        await userQuery({
+            variables: { handle: formHandle, password: formPassword },
+        });
     };
 
     useEffect(() => {
