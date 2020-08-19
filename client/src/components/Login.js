@@ -19,12 +19,6 @@ const Login = (props) => {
         localStorage.setItem("token", userToken);
     };
 
-    // useEffect(() => {
-    // if (data && data.users) {
-    //     props.setUser(data.users[0]);
-    // }
-    // }, [data]);
-
     return (
         <form className="auth-form" onSubmit={handleSubmit(onSubmit)}>
             <div className="input-group">

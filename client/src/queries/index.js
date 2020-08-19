@@ -16,6 +16,7 @@ export const GET_MESSAGES = gql`
         messages {
             content
             handle
+            send_date
         }
     }
 `;
@@ -42,6 +43,7 @@ export const CREATE_MESSAGE = gql`
     mutation CreateMessage($content: String!) {
         addMessage(content: $content) {
             content
+            send_date
         }
     }
 `;

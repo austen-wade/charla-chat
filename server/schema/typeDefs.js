@@ -13,6 +13,7 @@ const typeDefs = gql`
         user_id: String
         handle: String
         user: User
+        send_date: Float
     }
 
     type Token {

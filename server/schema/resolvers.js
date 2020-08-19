@@ -34,10 +34,11 @@ const resolvers = {
             return await (await db.query(`SELECT * FROM chat_user`)).rows;
         },
         messages: async () => {
-            return await (
+            const response = await (
                 await db.query(`SELECT * FROM messages, chat_user WHERE messages.user_id = chat_user.user_id ORDER BY send_date;
             `)
             ).rows;
+            return response;
         },
     },
     Mutation: {
@@ -80,7 +81,7 @@ const resolvers = {
         addMessage: async (parent, { content }, { user }) => {
             user ? skip : new ForbiddenError("Not authenticated as user.");
             const querydb = await db.query(
-                `INSERT INTO messages(content, user_id, send_date) VALUES($1, $2, $3) RETURNING content, user_id`,
+                `INSERT INTO messages(content, user_id, send_date) VALUES($1, $2, $3) RETURNING content, user_id, DATE(send_date)`,
                 [content, user.user_id, new Date()]
             );
             pubSub.publish(MESSAGE_CREATED, {
