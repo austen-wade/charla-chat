@@ -14,8 +14,9 @@ const Login = (props) => {
         });
         console.log({ response });
         if (!response) return;
-        props.setUser(response.data.loginUser.user);
-        localStorage.setItem("token", response.data.loginUser.token);
+        const userToken = response.data.loginUser.token;
+        props.setUser(userToken);
+        localStorage.setItem("token", userToken);
     };
 
     // useEffect(() => {

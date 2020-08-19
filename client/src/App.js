@@ -78,14 +78,7 @@ const client = new ApolloClient({
 
 function App() {
     const [isSignUp, setSignUp] = useState(false);
-    const [user, setUser] = useState(
-        true
-            ? null
-            : {
-                  handle: "tester",
-                  user_id: "75e5f407-bae1-4291-b377-f07cc5c6f5da",
-              }
-    );
+    const [user, setUser] = useState(null);
 
     const handleToggleSignUp = (e) => {
         e.preventDefault();
