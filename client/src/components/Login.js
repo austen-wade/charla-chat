@@ -1,12 +1,34 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useLazyQuery } from "@apollo/client";
-import { GET_USER_HANDLES } from "../queries";
+import {
+    useLazyQuery,
+    useApolloClient,
+    useMutation,
+    writeData,
+} from "@apollo/client";
+import { GET_USER_HANDLES, LOGIN } from "../queries";
+
+console.log(LOGIN);
 
 const Login = (props) => {
     const [email, setEmail] = useState("");
     const [handle, setHandle] = useState("");
     const [password, setPassword] = useState("");
+
+    /*Comment so I can find this later if I need to*/
+    const client = useApolloClient();
+    const [login, { notAnotherVariablesName }] = useMutation(LOGIN, {
+        onCompleted({ token }) {
+            console.log("token", token);
+            localStorage.setItem("token", token);
+            //client.writeData({ data: { isLoggedIn: true } });
+        },
+        onError() {
+            console.log(notAnotherVariablesName);
+        },
+    });
+
+    /////////////////////////////////////////////////
 
     const [userQuery, { called, loading, data }] = useLazyQuery(
         GET_USER_HANDLES,
@@ -17,12 +39,15 @@ const Login = (props) => {
     const { register, handleSubmit, errors } = useForm();
 
     const onSubmit = async ({ formHandle, formPassword }) => {
+        await login({
+            variables: { email: formHandle, password: formPassword },
+        });
         console.log(formHandle, formPassword);
         if (formHandle) await setHandle(formHandle);
         console.log({ handle });
         // if (formEmail) await setEmail(formEmail);
         console.log({ email });
-        await userQuery();
+        // await userQuery();
     };
 
     useEffect(() => {
