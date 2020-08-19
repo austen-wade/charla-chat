@@ -34,7 +34,7 @@ code {
 }
 
 .message {
-    margin: 7px 0;
+    margin: 10px 0;
 }
 
 .message-writer {
@@ -48,6 +48,16 @@ code {
     padding: 20px;
     width: 100%;
     outline: none;
+}
+
+.message-user {
+    font-size: 10px;
+    display: flex;
+    margin-bottom: 3px;
+
+    .message-date {
+        margin-left: 8px;
+    }
 }
 
 .auth-form {
