@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { timeConversion } from "../utils";
+import { formatAMPM } from "../utils";
 
 const Messages = ({ subscribeToNewMessages, loading, error, data }) => {
     const messageAreaRef = React.useRef(null);
@@ -18,11 +18,8 @@ const Messages = ({ subscribeToNewMessages, loading, error, data }) => {
                 !!data.messages.length &&
                 data.messages.map((message) => {
                     const messageDate = new Date(message.send_date);
-                    const currentDate = new Date();
 
-                    let timeDisplay = timeConversion(
-                        currentDate.getTime() - messageDate.getTime()
-                    );
+                    let timeDisplay = formatAMPM(messageDate);
 
                     return (
                         <div
