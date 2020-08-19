@@ -75,7 +75,7 @@ const resolvers = {
             if (!passwordIsValid) {
                 throw new AuthenticationError("Password is invalid");
             }
-            return { token: createToken(userData, secret) };
+            return { token: createToken(userData, secret), user: userData };
         },
         addMessage: async (parent, { content }, { user }) => {
             user ? skip : new ForbiddenError("Not authenticated as user.");
