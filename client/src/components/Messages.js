@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 
 const Messages = ({ subscribeToNewMessages, loading, error, data }) => {
     const messageAreaRef = React.useRef(null);

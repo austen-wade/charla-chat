@@ -9,7 +9,6 @@ import Sidebar from "./components/Sidebar";
 import {
     ApolloClient,
     InMemoryCache,
-    gql,
     ApolloProvider,
     ApolloLink,
 } from "@apollo/client";
