@@ -19,22 +19,18 @@ import { onError } from "@apollo/client/link/error";
 import { WebSocketLink } from "@apollo/client/link/ws";
 import { getMainDefinition } from "apollo-utilities";
 
-// const link = new WebSocketLink({
-//     uri: "ws://localhost:4001/graphql",
-//     options: {
-//         reconnect: true,
-//     },
-// });
+const GQL_WEB_SOCKET_URI = `ws://localhost:4001/graphql`;
+const GQL_HTTP_URI = `http://localhost:4001/graphql`;
 
 const wsLink = new WebSocketLink({
-    uri: "ws://localhost:4001/graphql",
+    uri: GQL_WEB_SOCKET_URI,
     options: {
         reconnect: true,
     },
 });
 
 const httpLink = new HttpLink({
-    uri: "http://localhost:4001/graphql",
+    uri: GQL_HTTP_URI,
 });
 
 const terminalLink = split(
@@ -77,7 +73,6 @@ const errorLink = onError(({ graphqlErrors, networkError }) => {
 const link = ApolloLink.from([authLink, errorLink, terminalLink]);
 
 const client = new ApolloClient({
-    //uri: `http://localhost:4001/graphql`,
     cache: new InMemoryCache(),
     link,
 });
