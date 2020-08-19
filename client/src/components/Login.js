@@ -1,28 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import { useLazyQuery } from "@apollo/client";
-import { GET_USER_HANDLES } from "../queries";
+import { useMutation } from "@apollo/client";
+import { LOGIN } from "../queries";
 
 const Login = (props) => {
     const { register, handleSubmit, errors } = useForm();
 
-    const [userQuery, { called, loading, data }] = useLazyQuery(
-        GET_USER_HANDLES
-    );
+    const [userLogin, { data }] = useMutation(LOGIN);
 
     const onSubmit = async ({ formHandle, formPassword }) => {
-        await userQuery({
+        const response = await userLogin({
             variables: { handle: formHandle, password: formPassword },
         });
+        console.log({ response });
+        if (!response) return;
+        props.setUser(response.data.loginUser.user);
+        localStorage.setItem("token", response.data.loginUser.token);
     };
 
-    useEffect(() => {
-        if (called && !loading) {
-            if (data && data.users) {
-                props.setUser(data.users[0]);
-            }
-        }
-    }, [data]);
+    // useEffect(() => {
+    // if (data && data.users) {
+    //     props.setUser(data.users[0]);
+    // }
+    // }, [data]);
 
     return (
         <form className="auth-form" onSubmit={handleSubmit(onSubmit)}>
