@@ -80,6 +80,11 @@ function App() {
     const [isSignUp, setSignUp] = useState(false);
     const [user, setUser] = useState(null);
 
+    React.useEffect(() => {
+        const token = localStorage.getItem("token");
+        setUser(token);
+    }, []);
+
     const handleToggleSignUp = (e) => {
         e.preventDefault();
         setSignUp(!isSignUp);
