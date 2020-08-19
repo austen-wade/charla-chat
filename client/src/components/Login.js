@@ -1,66 +1,28 @@
 import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import {
-    useLazyQuery,
-    useApolloClient,
-    useMutation,
-    writeData,
-} from "@apollo/client";
-import { GET_USER_HANDLES, LOGIN } from "../queries";
-
-console.log(LOGIN);
+import { useMutation } from "@apollo/client";
+import { LOGIN } from "../queries";
 
 const Login = (props) => {
-    const [email, setEmail] = useState("");
-    const [handle, setHandle] = useState("");
-    const [password, setPassword] = useState("");
-
-    /*Comment so I can find this later if I need to*/
-    const client = useApolloClient();
-    const [login, { notAnotherVariablesName }] = useMutation(LOGIN, {
-        onCompleted({ token }) {
-            console.log("token", token);
-            localStorage.setItem("token", token);
-            //client.writeData({ data: { isLoggedIn: true } });
-        },
-        onError() {
-            console.log(notAnotherVariablesName);
-        },
-    });
-
-    /////////////////////////////////////////////////
-
-    const [userQuery, { called, loading, data }] = useLazyQuery(
-        GET_USER_HANDLES,
-        {
-            variables: { handle, email },
-        }
-    );
     const { register, handleSubmit, errors } = useForm();
 
+    const [userLogin, { data }] = useMutation(LOGIN);
+
     const onSubmit = async ({ formHandle, formPassword }) => {
-        await login({
-            variables: { email: formHandle, password: formPassword },
+        const response = await userLogin({
+            variables: { handle: formHandle, password: formPassword },
         });
-        console.log(formHandle, formPassword);
-        if (formHandle) await setHandle(formHandle);
-        console.log({ handle });
-        // if (formEmail) await setEmail(formEmail);
-        console.log({ email });
-        // await userQuery();
+        console.log({ response });
+        if (!response) return;
+        props.setUser(response.data.loginUser.user);
+        localStorage.setItem("token", response.data.loginUser.token);
     };
 
-    useEffect(() => {
-        if (data && data.users.length) {
-            console.log({ data });
-            const userByHandle = data.users.find((user) => {
-                console.log({ dataHandle: user.handle, handle });
-                return user.handle === handle;
-            });
-            console.log({ userByHandle });
-            props.setUser(userByHandle);
-        }
-    }, [called, data, handle, email]);
+    // useEffect(() => {
+    // if (data && data.users) {
+    //     props.setUser(data.users[0]);
+    // }
+    // }, [data]);
 
     return (
         <form className="auth-form" onSubmit={handleSubmit(onSubmit)}>
